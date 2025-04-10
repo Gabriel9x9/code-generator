@@ -1,5 +1,4 @@
-package com.halo.acm;
-
+package src.com.halo.acm;
 
 import java.util.Scanner;
 
