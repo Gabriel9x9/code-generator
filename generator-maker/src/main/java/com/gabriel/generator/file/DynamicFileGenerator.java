@@ -1,7 +1,7 @@
-package com.gabriel.generator;
+package com.gabriel.generator.file;
 
 import cn.hutool.core.io.FileUtil;
-import com.gabriel.model.MainTemplateConfig;
+import com.gabriel.model.DataModel;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 //
-public class DynamicGenerator {
+public class DynamicFileGenerator {
 
     /**
      * 生成文件
@@ -33,10 +33,10 @@ public class DynamicGenerator {
         String templateName=new File(inputPath).getName();
         Template template = configuration.getTemplate(templateName);
 
-        MainTemplateConfig mainTemplateConfig = new MainTemplateConfig();
-        mainTemplateConfig.setAuthor("Gabriel");
-        mainTemplateConfig.setLoop(false);
-        mainTemplateConfig.setOutputText("求和结果：");
+        DataModel dataModel = new DataModel();
+        dataModel.setAuthor("Gabriel");
+        dataModel.setLoop(false);
+        dataModel.setOutputText("求和结果：");
 
         // 文件不存在则创建文件和父目录
         if (!FileUtil.exist(outputPath)) {
@@ -49,19 +49,6 @@ public class DynamicGenerator {
         out.close();
     }
 
-//    public static void main(String[] args) throws IOException, TemplateException {
-//        //
-//        String projectPath=System.getProperty("user.dir");
-//        String inputPath=projectPath+File.separator+"src/main/resources/templates/MainTemplate.java.ftl";
-//
-//        String outputPath=projectPath+File.separator+"MainTemplate.java";
-//
-//        MainTemplateConfig mainTemplateConfig = new MainTemplateConfig();
-//        mainTemplateConfig.setAuthor("Gabriel");
-//        mainTemplateConfig.setLoop(false);
-//        mainTemplateConfig.setOutputText("求和结果：");
-//        doGenerate(inputPath,outputPath,mainTemplateConfig);
-//    }
 
 
 }

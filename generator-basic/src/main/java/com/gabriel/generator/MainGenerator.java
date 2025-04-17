@@ -15,27 +15,25 @@ public class MainGenerator {
      */
     public static void doGenerator(Object model) throws TemplateException, IOException {
 
-        String projectPath=System.getProperty("user.dir");
-        // root
-        File parentFile = new File(projectPath).getParentFile();
-        System.out.println("projectPath: "+projectPath);
-        System.out.println("parentPath: "+parentFile.getAbsolutePath());
+        String inputRootPath="F:\\Projects\\code-generator\\code-generator\\demo-projects\\acm-template-pro";
+        String outputRootPath="F:\\Projects\\code-generator\\code-generator\\acm-template-pro";
 
         // input and output
-        String inputPath = new File(parentFile, "demo-projects/acm-template").getAbsolutePath();
-        String outputPath = projectPath;
-        System.out.println("inputPath: "+inputPath);
-        System.out.println("outputPath: "+outputPath);
+        String inputPath ;
+        String outputPath ;
 
-        // create files
+        inputPath=new File(inputRootPath,"src/com/gabriel/acm/MainTemplate.java.ftl").getAbsolutePath();
+        outputPath=new File(outputRootPath,"src/com/gabriel/acm/MainTemplate.java").getAbsolutePath();
+
+        DynamicGenerator.doGenerate(inputPath,outputPath,model);
+
+        inputPath=new File(inputRootPath,".gitignore").getAbsolutePath();
+        outputPath=new File(outputRootPath,".gitignore").getAbsolutePath();
         StaticGenerator.copyFilesByHutool(inputPath,outputPath);
 
-
-
-        String inputDynamicFilePath=projectPath+File.separator+"src/main/resources/templates/MainTemplate.java.ftl";
-        String outputDynamicFilePath=outputPath+File.separator+"acm-template/src/com/gabriel/acm/MainTemplate.java";
-        DynamicGenerator.doGenerate(inputDynamicFilePath,outputDynamicFilePath,model);
-
+        inputPath=new File(inputRootPath,"README.md").getAbsolutePath();
+        outputPath=new File(outputRootPath,"README.md").getAbsolutePath();
+        StaticGenerator.copyFilesByHutool(inputPath,outputPath);
     }
 
     public static void main(String[] args) throws TemplateException, IOException {
