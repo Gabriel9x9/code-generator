@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
 import com.gabriel.generator.JarGenerator;
+import com.gabriel.generator.ScriptGenerator;
 import com.gabriel.generator.file.DynamicFileGenerator;
 import com.gabriel.meta.Meta;
 import com.gabriel.meta.MetaManager;
@@ -79,6 +80,23 @@ public class MainGenerator {
         JarGenerator.doGenerate(outputPath);
 
         // 得到jar包，用ScriptGenerator工具类封装脚本。
+        String shellOutputFilePath=outputPath+File.separator+"generator";
+        String jarName=String.format("%s-%s-jar-with-dependencies.jar",meta.getName(),meta.getVersion());
+        String jarPath="target/"+jarName;
+        ScriptGenerator.doGenerater(shellOutputFilePath,jarPath);
+
+        // 精简版程序（产物包）
+        String distOutputPath=outputPath+"-dist";
+        // get jar package
+        String targetAbsolutePath = distOutputPath + File.separator + "target";
+        FileUtil.mkdir(targetAbsolutePath);
+        String jarAbsolutePath = outputPath + File.separator + jarPath;
+        FileUtil.copy(jarAbsolutePath,targetAbsolutePath,true);
+        // copy shell file
+        FileUtil.copy(shellOutputFilePath,distOutputPath,true);
+        FileUtil.copy(shellOutputFilePath+".bat",distOutputPath,true);
+        // copy original template files
+        FileUtil.copy(sourceCopyDestPath,distOutputPath,true);
 
     }
 }
