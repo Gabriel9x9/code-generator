@@ -1,7 +1,7 @@
 package com.gabriel.generator;
 
 public class ScriptGenerator {
-    public static void doGenerater(String shellOutputFilePath, String jarPath) {
 
+    public static void doGenerate(String shellOutputFilePath, String jarPath) {
     }
 }
