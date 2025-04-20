@@ -9,12 +9,12 @@ import lombok.Data;
 public class DataModel {
 
     //circulate
-    private boolean loop=false;
+    public boolean loop=false;
 
     //auther
-    private String author="Gabriel";
+    public String author="Gabriel";
 
     //out
-    private String outputText="sum = ";
+    public String outputText="sum = ";
 
 }

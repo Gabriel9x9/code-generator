@@ -23,28 +23,41 @@ public class MainGenerator {
     * @throws TemplateException
     * @throws IOException
     */
-    public static void doGenerator(Object model) throws TemplateException, IOException {
+    public static void doGenerator(DataModel model) throws TemplateException, IOException {
 
-        String inputRootPath="F:\\Projects\\code-generator\\code-generator\\demo-projects\\acm-template-pro";
-        String outputRootPath="F:\\Projects\\code-generator\\code-generator\\acm-template-pro";
+        String inputRootPath="${fileConnfig.inputRootPath}";
+        String outputRootPath="${fileConnfig.outputRootPath}";
 
         // input and output
         String inputPath ;
         String outputPath ;
 
-        inputPath=new File(inputRootPath,"src/com/gabriel/acm/MainTemplate.java.ftl").getAbsolutePath();
+        <#list modelConfig.model as modelInfo>
+            ${modelInfo.type} ${modelInfo.fieldName} = model.${modelInfo.fieldName};
+        </#list>
 
+        <#list fileConfig.files as fileInfo>
 
-        // create files
-        StaticGenerator.copyFilesByHutool(inputPath,outputPath);
+            <#if fileInfo.condition??>
+                if(${fileInfo.condition}){
+                    inputPath=new File(inputRootPath,"${fileInfo.inputPath}").getAbsolutePath();
+                    outputPath=new File(outputRootPath,"${fileInfo.outputPath}").getAbsolutePath();
+                    <#if fileInfo.generateType=="static">
+                        StaticGenerator.copyFilesByHutool(inputPath,outputPath);
+                        <#else>
+                        DynamicGenerator.doGenerate(inputPath,outputPath,model);
+                    </#if>
+            <#else>
+                inputPath=new File(inputRootPath,"${fileInfo.inputPath}").getAbsolutePath();
+                outputPath=new File(outputRootPath,"${fileInfo.outputPath}").getAbsolutePath();
+                <#if fileInfo.generateType=="static">
+                    StaticGenerator.copyFilesByHutool(inputPath,outputPath);
+                <#else>
+                    DynamicGenerator.doGenerate(inputPath,outputPath,model);
+                </#if>
+            </#if>
 
-
-        // 一定要先声明 projectPath，否则后面用不了！
-        String projectPath = System.getProperty("user.dir");
-        String inputDynamicFilePath=projectPath+File.separator+"src/main/resources/templates/MainTemplate.java.ftl";
-        String outputDynamicFilePath=outputPath+File.separator+"acm-template/src/com/gabriel/acm/MainTemplate.java";
-        DynamicGenerator.doGenerate(inputDynamicFilePath,outputDynamicFilePath,model);
-
+        </#list>
     }
 
 
