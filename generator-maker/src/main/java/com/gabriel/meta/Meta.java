@@ -1,6 +1,5 @@
 package com.gabriel.meta;
 
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

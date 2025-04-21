@@ -1,8 +1,8 @@
 package com.gabriel.generator.main;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.gabriel.generator.JarGenerator;
 import com.gabriel.generator.ScriptGenerator;
 import com.gabriel.generator.file.DynamicFileGenerator;
@@ -15,17 +15,11 @@ import java.io.IOException;
 
 public abstract class GenerateTemplate {
 
-
     public void doGenerate() throws TemplateException, IOException, InterruptedException {
         Meta meta = MetaManager.getMetaObject();
-        System.out.println(meta);
-
-        // output path
         String projectPath = System.getProperty("user.dir");
         String outputPath = projectPath + File.separator + "generated" + File.separator + meta.getName();
-        System.out.println(outputPath);
-
-        doGenerate(meta,outputPath);
+        doGenerate(meta, outputPath);
     }
 
     /**
@@ -35,28 +29,27 @@ public abstract class GenerateTemplate {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void doGenerate(Meta meta,String outputPath) throws TemplateException, IOException, InterruptedException {
-
-        if(!FileUtil.exist(outputPath)){
+    public void doGenerate(Meta meta, String outputPath) throws TemplateException, IOException, InterruptedException {
+        if (!FileUtil.exist(outputPath)) {
             FileUtil.mkdir(outputPath);
         }
 
-        // 1.复制原始模板文件
-        String sourceCopyDestPath =copySource(meta, outputPath);
+        // 1、复制原始文件
+        String sourceCopyDestPath = copySource(meta, outputPath);
 
-        // 2.代码生成
-        generateCode(meta,outputPath);
+        // 2、代码生成
+        generateCode(meta, outputPath);
 
-        // 3.构建jar包
+        // 3、构建 jar 包
         String jarPath = buildJar(meta, outputPath);
 
-        // 4.封装脚本
+        // 4、封装脚本
         String shellOutputFilePath = buildScript(outputPath, jarPath);
 
-        // 5.生成精简版
-        buildDist(outputPath,sourceCopyDestPath,jarPath,shellOutputFilePath);
-
+        // 5、生成精简版的程序（产物包）
+        buildDist(outputPath, sourceCopyDestPath, jarPath, shellOutputFilePath);
     }
+
 
     /**
      * 复制原始文件
@@ -197,5 +190,17 @@ public abstract class GenerateTemplate {
         // 拷贝源模板文件
         FileUtil.copy(sourceCopyDestPath, distOutputPath, true);
         return distOutputPath;
+    }
+
+    /**
+     * 制作压缩包
+     *
+     * @param outputPath
+     * @return 压缩包路径
+     */
+    protected String buildZip(String outputPath) {
+        String zipPath = outputPath + ".zip";
+        ZipUtil.zip(outputPath, zipPath);
+        return zipPath;
     }
 }

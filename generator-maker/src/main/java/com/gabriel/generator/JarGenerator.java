@@ -3,34 +3,36 @@ package com.gabriel.generator;
 import java.io.*;
 import java.util.Map;
 
-
-
 public class JarGenerator {
 
     public static void doGenerate(String projectDir) throws IOException, InterruptedException {
-        // 直接把 where mvn.cmd 给你的绝对路径硬编码进来
-        // —— 或者用 System.getenv("MAVEN_HOME") 拼一下也行
-        String mvnCmd = "F:\\Java\\apache-maven-3.9.9\\bin\\mvn.cmd";
-        String[] command = { "cmd", "/c", mvnCmd, "clean", "package", "-DskipTests=true" };
+        // 清理之前的构建并打包
+        // 注意不同操作系统，执行的命令不同
+        String winMavenCommand = "mvn.cmd clean package -DskipTests=true";
+        String otherMavenCommand = "mvn clean package -DskipTests=true";
+        String mavenCommand = otherMavenCommand;
 
-        ProcessBuilder pb = new ProcessBuilder(command);
-        pb.directory(new File(projectDir));
-        pb.redirectErrorStream(true);
+        // 这里一定要拆分！
+        ProcessBuilder processBuilder = new ProcessBuilder(mavenCommand.split(" "));
+        processBuilder.directory(new File(projectDir));
+        Map<String, String> environment = processBuilder.environment();
+        System.out.println(environment);
+        Process process = processBuilder.start();
 
-        Process p = pb.start();
-        try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
-            String line;
-            while ((line = r.readLine()) != null) {
-                System.out.println(line);
-            }
+        // 读取命令的输出
+        InputStream inputStream = process.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
         }
-        int code = p.waitFor();
-        System.out.println("Maven 构建结束，退出码：" + code);
+
+        // 等待命令执行完成
+        int exitCode = process.waitFor();
+        System.out.println("命令执行结束，退出码：" + exitCode);
     }
 
-
-
     public static void main(String[] args) throws IOException, InterruptedException {
-        doGenerate("F:\\Projects\\code-generator\\code-generator\\generator-maker\\generated\\acm-template-pro-generator");
+        doGenerate("C:\\code\\yuzi-generator\\yuzi-generator-maker\\generated\\acm-template-pro-generator");
     }
 }

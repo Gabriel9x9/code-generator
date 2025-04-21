@@ -24,5 +24,4 @@ public enum ModelTypeEnum {
     public String getValue() {
         return value;
     }
-    
 }

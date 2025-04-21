@@ -4,19 +4,13 @@
   "basePackage": "com.gabriel",
   "version": "1.0",
   "author": "gabriel",
-  "createTime": "2025-4-10",
+  "createTime": "2023-11-22",
   "fileConfig": {
     "inputRootPath": ".source/acm-template-pro",
     "outputRootPath": "generated",
-    "sourceRootPath": "F:/Projects/code-generator/code-generator/demo-projects/acm-template-pro",
+    "sourceRootPath": "F:\\Projects\\code-generator\\code-generator\\demo-projects\\acm-template-pro",
     "type": "dir",
     "files": [
-      {
-      "inputPath": "src/com/gabriel/acm/MainTemplate.java.ftl",
-      "outputPath": "src/com/gabriel/acm/MainTemplate.java",
-        "type": "file",
-        "generateType": "dynamic"
-      },
       {
         "groupKey": "git",
         "groupName": "开源",
@@ -36,31 +30,36 @@
             "generateType": "static"
           }
         ]
+      },
+      {
+        "inputPath": "src/com/gabriel/acm/MainTemplate.java.ftl",
+        "outputPath": "src/com/gabriel/acm/MainTemplate.java",
+        "type": "file",
+        "generateType": "dynamic"
       }
     ]
   },
-
   "modelConfig": {
     "models": [
       {
         "fieldName": "needGit",
         "type": "boolean",
-        "description": "是否生成 .gitinore文件",
+        "description": "是否生成 .gitignore 文件",
         "defaultValue": true
       },
       {
         "fieldName": "loop",
         "type": "boolean",
         "description": "是否生成循环",
-      "defaultValue": false,
-      "abbr": "l"
+        "defaultValue": false,
+        "abbr": "l"
       },
       {
         "groupKey": "mainTemplate",
         "groupName": "核心模板",
         "type": "MainTemplate",
         "description": "用于生成核心模板文件",
-        "condition": "loo                                                                                                      p",
+        "condition": "loop",
         "models": [
           {
             "fieldName": "author",

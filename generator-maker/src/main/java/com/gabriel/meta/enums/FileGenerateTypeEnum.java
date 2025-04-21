@@ -5,8 +5,8 @@ package com.gabriel.meta.enums;
  */
 public enum FileGenerateTypeEnum {
 
-    DYNAMIC("动态","dynamic"),
-    STATIC("静态","static");
+    DYNAMIC("动态", "dynamic"),
+    STATIC("静态", "static");
 
     private final String text;
 
@@ -16,9 +16,11 @@ public enum FileGenerateTypeEnum {
         this.text = text;
         this.value = value;
     }
+
     public String getText() {
         return text;
     }
+
     public String getValue() {
         return value;
     }
